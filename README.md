@@ -13,4 +13,6 @@ It contains the following data fields:
 - user_id          object
 - yelping_since    object
 
+Collaborators can view brainstorm docs at https://drive.google.com/drive/folders/10nvQvbiKhLKwC5BhrFXJ2bYQqTU79o2h?usp=sharing
+
 To see full documentations of the original json files: https://www.yelp.com/dataset/documentation/json
