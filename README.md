@@ -17,11 +17,11 @@ It contains the following data fields:
 
 The parsed csv files are stored locally and contains the following data fileds:
 - review_id
-- 'user_id
-- 'business_id'
-- stars'
-- 'date' 
-- 'text'
+- user_id
+- business_id
+- stars
+- date
+- text
 
 Collaborators can view brainstorm docs at https://drive.google.com/drive/folders/10nvQvbiKhLKwC5BhrFXJ2bYQqTU79o2h?usp=sharing
 
