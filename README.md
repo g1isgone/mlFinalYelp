@@ -13,6 +13,16 @@ It contains the following data fields:
 - user_id          object
 - yelping_since    object
 
+*NO NEED TO TOUCH ParseReivewJson.ipynb either !!!*
+
+The parsed csv files are stored locally and contains the following data fileds:
+- review_id
+- 'user_id
+- 'business_id'
+- stars'
+- 'date' 
+- 'text'
+
 Collaborators can view brainstorm docs at https://drive.google.com/drive/folders/10nvQvbiKhLKwC5BhrFXJ2bYQqTU79o2h?usp=sharing
 
 To see full documentations of the original json files: https://www.yelp.com/dataset/documentation/json
