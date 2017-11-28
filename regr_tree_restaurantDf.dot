@@ -1,0 +1,16 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="FridayClosingHours <= 50.5\nmse = 2.546\nsamples = 50520\nvalue = 5.018"] ;
+1 [label="MondayOpeningHours <= 51.5\nmse = 2.172\nsamples = 31956\nvalue = 5.289"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="mse = 2.165\nsamples = 24839\nvalue = 5.144"] ;
+1 -> 2 ;
+3 [label="mse = 1.87\nsamples = 7117\nvalue = 5.794"] ;
+1 -> 3 ;
+4 [label="RestaurantsReservations <= 0.5\nmse = 2.845\nsamples = 18564\nvalue = 4.552"] ;
+0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+5 [label="mse = 2.843\nsamples = 8014\nvalue = 4.275"] ;
+4 -> 5 ;
+6 [label="mse = 2.744\nsamples = 10550\nvalue = 4.762"] ;
+4 -> 6 ;
+}
