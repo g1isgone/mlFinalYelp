@@ -21,12 +21,12 @@ It contains the following data fields:
 *NO NEED TO TOUCH it either*
 
 The parsed csv files are stored locally and contains the following data fields:
-- review_id
-- user_id
-- business_id
-- stars
-- date
-- text
+- review_id (string, 22 character unique review id)
+- user_id (string, 22 character unique user id, maps to the user in user.json)
+- business_id (string, 22 character business id, maps to business in business.json)
+- stars (integer, star rating)
+- date (string, date formatted YYYY-MM-DD)
+- text (string, the review itself)
 
 ### FPII_user.ipynb
 
