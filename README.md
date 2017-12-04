@@ -72,9 +72,10 @@ Apply tf-idf and run naive Bayes model and support vector machine model to predi
 
 ## Fetech dataset
 
-To fetch large datasets stored remotely with Git LFS, view instructions here:
+To fetch large datasets (all .pkl) stored remotely with Git LFS, view instructions here:
 https://git-lfs.github.com/
 
+## Misc
 
 Collaborators can view brainstorm docs at https://drive.google.com/drive/folders/10nvQvbiKhLKwC5BhrFXJ2bYQqTU79o2h?usp=sharing
 
