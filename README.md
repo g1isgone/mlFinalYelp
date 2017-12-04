@@ -50,6 +50,8 @@ length: 388904
 
 ### FPIII_user.ipynb
 
+Contains scatterplot of review_count and average_stars
+
 Load UserWithReviewDf.pkl as userDf and drop users with *review_count<AvailReviewCount*
 
 Subset users with review_count==1 as inactive users and export the data frame as inactiveUserDf.pkl
