@@ -61,8 +61,72 @@ print(levels(azDf$RestaurantsAttire))
 azDf$RestaurantsAttire<- factor(azDf$RestaurantsAttire, levels = c("Unknown", "casual", "dressy", "formal"))
 print(levels(azDf$RestaurantsAttire))
 
-trueFalseOrdering = c("Unknown", "False", "True")
+print(levels(azDf$RestaurantsPriceRange2 )) 
+azDf$RestaurantsPriceRange2<- factor(azDf$RestaurantsPriceRange2, levels = c("Unknown", "1.0", "2.0", "3.0", "4.0"))
+print(levels(azDf$RestaurantsPriceRange2))
 
-
+print(levels(azDf$WiFi )) 
+azDf$WiFi<- factor(azDf$WiFi, levels = c("Unknown", "no", "paid", "free"))
+print(levels(azDf$WiFi))
 ```
 
+```{r}
+azCleanDf <- subset(azDf, select = -c( MondayOpeningHours, TuesdayOpeningHours, WednesdayOpeningHours, ThursdayOpeningHours, FridayOpeningHours, SaturdayOpeningHours, SundayOpeningHours, MondayClosingHours, TuesdayClosingHours, WednesdayClosingHours, ThursdayClosingHours, FridayClosingHours, SaturdayClosingHours, SundayClosingHours))
+
+print(colnames(azCleanDf))
+```
+
+
+
+Train & Test Data 
+```{r}
+subsetSamples = round(nObservations*0.7)
+train = azCleanDf %>% sample_n(subsetSamples)
+
+test = azCleanDf %>% 
+  setdiff(train)
+```
+
+
+Decision tree for review_count using train dataset 
+```{r}
+azReviewCount <- rpart(review_count ~ . , data = train, method = "anova")
+
+tree_azReviewCount = tree(review_count~., data = train)
+print(summary(tree_azReviewCount))
+rpart.plot(azReviewCount) 
+```
+ 
+
+Decision tree for stars using train dataset 
+```{r}
+azStars <- rpart(stars ~ . , data = train, method = "anova")
+
+tree_azStars = tree(stars~., data = train)
+print(summary(tree_azStars))
+rpart.plot(azStars) 
+```
+Decision tree for businessOpen using train dataset 
+```{r}
+
+
+azOpen <- rpart(is_open ~ . , data = train, method = "class")
+
+tree_azOpen = tree(is_open~., data = train)
+print(summary(tree_azOpen))
+rpart.plot(azOpen) 
+```
+
+```{r}
+colnames(azCleanDf)
+rf_az = randomForest(review_count ~ is_open+stars, 
+                         data = train, 
+                         mtry = 2, 
+                         importance = TRUE)
+
+random_forest_estimate_az = predict(rf_az, 
+                                 newdata = test)
+
+importance(rf_az)
+
+```
