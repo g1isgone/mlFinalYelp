@@ -1,0 +1,68 @@
+---
+title: "analysisOfAZandON"
+author: "Ji Won Chung"
+date: "12/5/2017"
+output: html_document
+---
+
+```{r}
+library(tree)
+library(dplyr)
+library(ggplot2)
+library(randomForest)
+
+
+library(rpart.plot)
+library(rpart)
+```
+
+```{r}
+azDf = read.csv('arizonaDf.csv', header = TRUE) 
+print(summary(azDf))
+nObservations = nrow(azDf)
+nFactors = ncol(azDf)
+print(nObservations)
+print(nFactors)
+azDf <-subset(azDf, select = -c(state))
+azDf <-subset(azDf, select = -c(X, level_0, index, Unnamed..0, business_id, city))
+azDf <-subset(azDf, select = -c(neighborhood))
+```
+
+
+```{r}
+ontarioDf = read.csv('onDf.csv', header = TRUE) 
+print(summary(ontarioDf))
+nObservations_ontario = nrow(ontarioDf)
+nFactors_ontario = ncol(ontarioDf)
+print(nObservations_ontario)
+print(nFactors_ontario)
+ontarioDf <-subset(ontarioDf, select = -c(state))
+ontarioDf <-subset(ontarioDf, select = -c(X, level_0, index, Unnamed..0, business_id, city))
+ontarioDf <-subset(ontarioDf, select = -c(neighborhood))
+print(colnames(ontarioDf)) 
+```
+```{r}
+set.seed(1)
+```
+
+```{r}
+azDf$stars <- as.numeric(azDf$stars)
+azDf$review_count <- as.numeric(azDf$review_count)
+
+print(levels(azDf$Alcohol))
+azDf$Alcohol<- factor(azDf$Alcohol, levels = c("Unknown", "none", "beer_and_wine", "full_bar"))
+print(levels(azDf$Alcohol))
+
+print(levels(azDf$NoiseLevel))
+azDf$NoiseLevel<- factor(azDf$NoiseLevel, levels = c("Unknown", "quiet", "average", "very_loud"))
+print(levels(azDf$NoiseLevel))
+
+print(levels(azDf$RestaurantsAttire))
+azDf$RestaurantsAttire<- factor(azDf$RestaurantsAttire, levels = c("Unknown", "casual", "dressy", "formal"))
+print(levels(azDf$RestaurantsAttire))
+
+trueFalseOrdering = c("Unknown", "False", "True")
+
+
+```
+

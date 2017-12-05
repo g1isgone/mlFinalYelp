@@ -1,0 +1,102 @@
+---
+title: "part3"
+author: "Ji Won Chung"
+date: "12/5/2017"
+output: html_document
+---
+
+Import Packages
+```{r}
+library(tree)
+library(dplyr)
+library(ggplot2)
+library(randomForest)
+
+
+library(rpart.plot)
+library(rpart)
+```
+
+Original Dataset Import & Summary 
+```{r}
+restaurantDf = read.csv('restaurantDf.csv', header = TRUE) 
+summary(restaurantDf)
+nObservations = nrow(restaurantDf)
+nFactors = ncol(restaurantDf)
+set.seed(1)
+```
+
+Changing Data Types & Reordering Factors 
+```{r}
+restaurantDf$stars <- as.numeric(restaurantDf$stars)
+restaurantDf$review_count <- as.numeric(restaurantDf$review_count)
+```
+
+Creating New DataFrames (some with fewer columns)
+```{r}
+cleanDf <- subset(restaurantDf, select = -c(X, index, business_id, city, neighborhood))
+
+colnames(cleanDf)
+
+cleanDf
+ 
+noOpeningHoursDf <- subset(cleanDf, select = -c( MondayOpeningHours, TuesdayOpeningHours, WednesdayOpeningHours, ThursdayOpeningHours, FridayOpeningHours, SaturdayOpeningHours, SundayOpeningHours, MondayClosingHours, TuesdayClosingHours, WednesdayClosingHours, ThursdayClosingHours, FridayClosingHours, SaturdayClosingHours, SundayClosingHours))
+
+noStatesDf <-subset(noOpeningHoursDf, select = -c(state))
+
+colnames(noStatesDf)
+```
+
+Train & Test Data 
+```{r}
+
+subsetSamples = round(nObservations*0.7)
+train = noStatesDf %>% sample_n(subsetSamples)
+
+test = noStatesDf %>% 
+  setdiff(train)
+```
+
+Decision tree for review_count using train dataset 
+```{r}
+fit <- rpart(review_count ~ . , data = train)
+rpart.plot(fit)
+print(fit)
+rsq.rpart(fit)
+```
+
+Decision tree for review_count using test dataset 
+```{r}
+rcTestFit <- rpart(review_count ~ . , data = test)
+rpart.plot(rcTestFit)
+print(rcTestFit)
+rsq.rpart(rcTestFit)
+```
+
+
+Decision tree for stars using train dataset 
+```{r}
+starfit <- rpart(stars ~ . , data = train)
+rpart.plot(starfit)
+print(starfit)
+rsq.rpart(starfit)
+```
+
+
+
+Decision tree for stars using test dataset 
+```{r}
+starTestFit <- rpart(stars ~ . , data = test)
+rpart.plot(starTestFit)
+print(starTestFit)
+rsq.rpart(starTestFit)
+```
+
+```{r}
+tree_restaurantStars= tree(stars ~ ., train)
+summary(tree_restaurantStars)
+print(tree_restaurantStars)
+tree_pred = predict(tree_restaurantStars, test)
+table(tree_pred, noStatesDf$stars)
+```
+
