@@ -58,7 +58,7 @@ restaurantDf$stars <- as.numeric(restaurantDf$stars)
 restaurantDf$review_count <- as.numeric(restaurantDf$review_count)
 ```
 
-
+---
 ## Setting Ordering to Factors 
 The columns "BusinessAcceptsCreditCards", "RestaurantsPriceRange2", and "RestaurantsTakeOut" can be considered categorical data types. We extracted the columns above by manually looking through the labels of each columns. However, we examine below that some of the orderings of the factors do not make sense. We arbitrarly ordered the factors from "Unknown" to "negative" to a more "positive" ranking. "Unknown" indicating that we did not have information on the data. "negative" indicating something that we presumed to not be in favor of the customer. "positive" indicating something in favor for the customer. However, this ranking is somewhat subjective. Hence, we explain this part by part for each of the columns. 
 ```{r}
@@ -74,15 +74,16 @@ print(levels(restaurantDf$BusinessAcceptsCreditCards ))
 print(levels(restaurantDf$RestaurantsTakeOut )) 
 restaurantDf$RestaurantsTakeOut<- factor(restaurantDf$RestaurantsTakeOut, levels = c("Unknown", "False", "True"))
 print(levels(restaurantDf$RestaurantsTakeOut )) 
-```
 
+```
+---
 #Removing Columns 
 We removed unnecessary columns "X" and "index" which are remnants of the preprocessing data in python. We also removed "business_id", "city", "neighborhood", and "state" because we were not interested in such fine grain information nor regional information given that our observation set was small. 
 ```{r}
 cleanDf <- subset(restaurantDf, select = -c(X, index, business_id, city, neighborhood, state))
 head(cleanDf)
 ```
-
+---
 #Taking the subset of the data 
 We took 70% of the dataset for the training model and 30% for the test model. 
 ```{r}
@@ -91,6 +92,34 @@ restaurant_train = cleanDf %>%
 
 restaurant_test = cleanDf %>%
   setdiff(restaurant_train)
-
 ```
 
+--- 
+# Creating a Decision Tree 
+## Predicting if the Business is Open 
+```{r}
+restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class")
+
+tree_Open = tree(is_open~., data = restaurant_train)
+print(summary(tree_Open))
+tree_Open
+rpart.plot(restaurantsOpen) 
+
+tree_pred = predict(tree_Open, restaurant_test, type = "class")
+table(tree_pred, test$High)
+```
+
+```{r}
+
+restaurantsOpen2 <- rpart(is_open ~ review_count+stars+BusinessAcceptsCreditCards+RestaurantsPriceRange2+Parking, data = restaurant_train, method = "class")
+
+tree_Open2 = tree(is_open~.-RestaurantsTakeOut, data = restaurant_train)
+print(summary(tree_Open2))
+print(tree_Open2)
+rpart.plot(restaurantsOpen2) 
+ 
+plot(tree_Open2)
+tree_Open2
+text(tree_Open2)
+tree_Open2
+```
