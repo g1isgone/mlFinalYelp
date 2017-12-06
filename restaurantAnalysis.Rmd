@@ -112,6 +112,7 @@ restaurant_test = cleanDf %>%
 # Creating a Decision Tree 
 
 For each of the decision tree models we made two plots. One using rpart.plot and the other using the tree library. The initial reason was the fact that the text() function would not work. However, we found out that it does work if we run the programs in chunks. However, we left both models because it was interesting to see slightly different models in some of the cases and some gave more statistics than others. 
+
 ---
 ## Predicting if the Restaurant is Open using a Classification Tree
 We created a classification tree that would predict if the restaurant was still in business or not ("is_open" column) using rpart. 
