@@ -4,7 +4,6 @@ author: "Ji Won Chung"
 date: "12/5/2017"
 output: html_document
 ---
----
 # Purpose of Exploring Restaurants of the Business Dataset 
 Our final project does a two part analysis: one on the user dataset and its corresponding reviews and another on the business dataset. Our final goal is to find if there is any overlap in what features businesses consider important and users consider important. We focused on restaurants information from the business dataset because we believed that Yelp reviews were generally written for restaurants and thought it was an interesting subset to look at. In addition, we hypothesized the user reviews would mainly be about restaurants and food. We try to identify what components define a "successful" restaurant business by exploring the business dataset which this file demonstrates. Our goal for exploring the restaurant business data is to use two types of models: decision trees and random forests to see if we can identify what are some potential factors that define a "successful" business. We planned to do this by identifying potential patterns that appear from the decision tree and random forest models. For example, we hypothesized that some factors may be indicated as factors of high importance for both the decision tree and random forests. If so, we further reasoned that those factors could potentially define what makes a restaurant business successful. 
 ---
@@ -182,8 +181,8 @@ rf_isOpen = randomForest(is_open~.,
                          data = cleanDf, 
                          mtry = 3,
                          importance = TRUE)
-importance(rf_isOpen)
-varImpPlot(rf_isOpen)
+print(importance(rf_isOpen))
+print(varImpPlot(rf_isOpen))
 ```
 ---
 We used sqrt(p) variables or approximately 3 mtry's because this was a random forest of classification trees. We tested it on the entire dataset, cleanDf. The results indicate that across all of the trees considered in the random forest, information on RestaurantsTakeOut is by far the most important variables. This reflects what we saw in our rpart model for the decision tree. 
@@ -196,8 +195,8 @@ rf_stars = randomForest(stars~.,
                          data = cleanDf, 
                           mtry = 2, 
                          importance = TRUE)
-importance(rf_stars)
-varImpPlot(rf_stars)
+print(importance(rf_stars))
+print(varImpPlot(rf_stars))
 ```
 ---
 The results indicate that across all of the trees considered in the random forest, information on BusinessAcceptsCreditCards is one of the most important variables. It actually is unclear what variable was important. There does not seem to be a variable that is strikingly important which seems to also reflect the bad model seen from our decision tree earlier. However, it does seem that Parking is never the bottom 2 importance variables. 
@@ -209,8 +208,8 @@ rf_reviewCount = randomForest(review_count~.,
                          data = cleanDf, 
                          mtry = 2,
                          importance = TRUE)
-importance(rf_reviewCount)
-varImpPlot(rf_reviewCount)
+print(importance(rf_reviewCount))
+print(varImpPlot(rf_reviewCount))
 ```
 ---
 The results indicate that across all of the trees considered in the random forest, information on Parking and RestaurntsPriceRange2 are by far the most important variables. This reflects what we saw in our decision tree earlier, so it strengthens our case that Parking and Price Range is important for determining the number of review counts of a business. The "is_open" category is also never the bottom two, so perhaps that is significant as well. 
