@@ -2,7 +2,9 @@
 title: "restaurantAnalysis"
 author: "Ji Won Chung"
 date: "12/5/2017"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 # Purpose of Exploring Restaurants of the Business Dataset 
 
