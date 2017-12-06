@@ -59,7 +59,7 @@ set.seed(1)
 ```
 
 ---
-#Changing Data Types & Reordering Factors 
+# Changing Data Types & Reordering Factors 
 ## Changing Factors to Numeric Data 
 "stars" and "review_count" are factor types in R initially. However, they are numbers on an ordinal scale and have a numeric ordering. Thus, we convert the data types of those columns to numeric.  
 ```{r}
@@ -85,14 +85,14 @@ restaurantDf$RestaurantsTakeOut<- factor(restaurantDf$RestaurantsTakeOut, levels
 print(levels(restaurantDf$RestaurantsTakeOut )) 
 ```
 ---
-#Removing Columns 
+# Removing Columns 
 We removed unnecessary columns "X" and "index" which are remnants of the preprocessing data in python. We also removed "business_id", "city", "neighborhood", and "state" because we were not interested in such fine grain information nor regional information given that our observation set was small. 
 ```{r}
 cleanDf <- subset(restaurantDf, select = -c(X, index, business_id, city, neighborhood, state))
 head(cleanDf)
 ```
 ---
-#Taking the subset of the data 
+# Taking the subset of the data 
 We took 70% of the dataset for the training model and 30% for the test model. 
 ```{r}
 restaurant_train = cleanDf %>%
@@ -175,7 +175,7 @@ text(tree_rc,  pretty = 0)
 The rpart model in this case is the same as the tree model as well. The model has four terminal nodes and three splitting categories: "Parking", "is_open", and "RestaurantsPriceRange2". The splitting categories intuitively make sense as to why they would determine review counts. If there was no parking, then half the restaurants had less than 51 reviews (or an average of 15). Else, if there were no information or there was parking, whether the restaurant was open or closed determined the number of reviews. If the restaurant was closed than 12% of the restaurants had less than 87 reviews (or an average of 47). Else, if the restaurant was Open, then the the Restaurants had around 101 reviews or more than 87 reviews. If the RestaurantsPriceRange2 was Unknown or on the low 1.0 range, then 14% of the restaurants had less than 101 reviews. If it was more than 1.0 price range then 23% of the time the restaurants had more than 101 reviews (or an average of 120 reviews). This seems to show that restaurants that potentially have parking, are open, and have a "high" or above 1.0 price range that they have more reviews. This intuitively makes sense because restaurants that are successful probably have parking information, are still open, and have a "pricey" range. 
 
 ---
-#Random Forest: Restaurant is_open
+# Random Forest: Restaurant is_open
 ```{r}
 rf_isOpen = randomForest(is_open~., 
                          data = cleanDf, 
@@ -188,7 +188,7 @@ print(varImpPlot(rf_isOpen))
 We used sqrt(p) variables or approximately 3 mtry's because this was a random forest of classification trees. We tested it on the entire dataset, cleanDf. The results indicate that across all of the trees considered in the random forest, information on RestaurantsTakeOut is by far the most important variables. This reflects what we saw in our rpart model for the decision tree. 
 
 ---
-#Random Forest: Restaurant stars
+# Random Forest: Restaurant stars
 We used p/3 variables or approximately 2 mtry's for the following random forests because this was a random forest of regression trees. We tested it on the entire dataset, cleanDf for both cases. 
 ```{r}
 rf_stars = randomForest(stars~., 
@@ -202,7 +202,7 @@ print(varImpPlot(rf_stars))
 The results indicate that across all of the trees considered in the random forest, information on BusinessAcceptsCreditCards is one of the most important variables. It actually is unclear what variable was important. There does not seem to be a variable that is strikingly important which seems to also reflect the bad model seen from our decision tree earlier. However, it does seem that Parking is never the bottom 2 importance variables. 
 
 ---
-#Random Forest: Restaurant reveiw_count
+# Random Forest: Restaurant reveiw_count
 ```{r}
 rf_reviewCount = randomForest(review_count~., 
                          data = cleanDf, 
