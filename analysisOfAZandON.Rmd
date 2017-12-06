@@ -117,16 +117,4 @@ print(summary(tree_azOpen))
 rpart.plot(azOpen) 
 ```
 
-```{r}
-colnames(azCleanDf)
-rf_az = randomForest(review_count ~ is_open+stars, 
-                         data = train, 
-                         mtry = 2, 
-                         importance = TRUE)
-
-random_forest_estimate_az = predict(rf_az, 
-                                 newdata = test)
-
-importance(rf_az)
-
-```
+ 

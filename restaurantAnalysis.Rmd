@@ -1,0 +1,84 @@
+---
+title: "restaurantAnalysis"
+author: "Ji Won Chung"
+date: "12/5/2017"
+output: html_document
+---
+# Purpose of the File (README)
+
+---
+# Import Necessary Packages 
+```{r}
+library(tree)
+library(dplyr)
+library(ggplot2)
+library(randomForest)
+library(rpart.plot)
+library(rpart)
+```
+
+--- 
+#Original Dataset Import & Summary 
+
+## Analysis of the Summary 
+Somehting that is apparent from glance is that this dataset has a lot of "Unknown" labels. "Unknown" is a remnant of the python processing file which was used to indicate data that was missing. 
+```{r}
+restaurantDf = read.csv('restaurantDf.csv', header = TRUE) 
+print("This is the summary information of the original dataset...")
+print(summary(restaurantDf))
+nObservations = nrow(restaurantDf)
+nFactors = ncol(restaurantDf)
+```
+
+These are the number of observations in the original dataset
+```{r}
+print(nObservations)
+```
+These are the number of columns in the original dataset
+```{r}
+print(nFactors)
+``` 
+
+These are the columns in the original dataset
+```{r}
+print(colnames(restaurantDf))
+```
+
+For reference, we have set the seed to 1. 
+```{r}
+set.seed(1)
+```
+
+---
+#Changing Data Types & Reordering Factors 
+## Changing Factors to Numeric Data 
+"stars" and "review_count" are factor types in R initially. However, they are numbers on an ordinal scale and have a numeric ordering. Thus, we convert the data types of those columns to numeric. 
+```{r}
+restaurantDf$stars <- as.numeric(restaurantDf$stars)
+restaurantDf$review_count <- as.numeric(restaurantDf$review_count)
+```
+
+
+## Setting Ordering to Factors 
+The columns "Alcohol", "NoiseLevel", "RestaurantsAttire", "RestaurantsPriceRange2", and "WiFi" can be considered categorical data types. We extracted the columns above by manually looking through the labels of each columns. However, we examine below that some of the orderings of the factors do not make sense. We arbitrarly ordered the factors from "Unknown" to "negative" to a more "positive" ranking. "Unknown" indicating that we did not have information on the data. "negative" indicating something that we presumed to not be in favor of the customer. "positive" indicating something in favor for the customer. However, this ranking is somewhat subjective. Hence, we explain this part by part for each of the columns. 
+```{r}
+print(levels(restaurantDf$Alcohol))
+restaurantDf$Alcohol<- factor(restaurantDf$Alcohol, levels = c("Unknown", "none", "beer_and_wine", "full_bar"))
+print(levels(restaurantDf$Alcohol))
+
+print(levels(restaurantDf$NoiseLevel))
+restaurantDf$NoiseLevel<- factor(restaurantDf$NoiseLevel, levels = c("Unknown", "quiet", "average", "very_loud"))
+print(levels(restaurantDf$NoiseLevel))
+
+print(levels(restaurantDf$RestaurantsAttire))
+restaurantDf$RestaurantsAttire<- factor(restaurantDf$RestaurantsAttire, levels = c("Unknown", "casual", "dressy", "formal"))
+print(levels(restaurantDf$RestaurantsAttire))
+
+print(levels(restaurantDf$RestaurantsPriceRange2 )) 
+restaurantDf$RestaurantsPriceRange2<- factor(restaurantDf$RestaurantsPriceRange2, levels = c("Unknown", "1.0", "2.0", "3.0", "4.0"))
+print(levels(restaurantDf$RestaurantsPriceRange2))
+
+print(levels(restaurantDf$WiFi )) 
+restaurantDf$WiFi<- factor(restaurantDf$WiFi, levels = c("Unknown", "no", "paid", "free"))
+print(levels(restaurantDf$WiFi))
+```

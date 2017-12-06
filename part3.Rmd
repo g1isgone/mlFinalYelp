@@ -51,10 +51,19 @@ Train & Test Data
 ```{r}
 
 subsetSamples = round(nObservations*0.7)
-train = noStatesDf %>% sample_n(subsetSamples)
+trainInitial = noStatesDf %>% sample_n(subsetSamples)
 
-test = noStatesDf %>% 
-  setdiff(train)
+testInitial = noStatesDf %>% 
+  setdiff(trainInitial)
+```
+
+
+```{r}
+restaurantsOpen <- rpart(is_open ~ . , data = trainInitial, method = "class")
+
+tree_Open = tree(is_open~., data = trainInitial)
+print(summary(tree_Open))
+rpart.plot(restaurantsOpen) 
 ```
 
 Decision tree for review_count using train dataset 
