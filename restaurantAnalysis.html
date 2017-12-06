@@ -130,7 +130,10 @@ $(document).ready(function () {
 </div>
 <div id="original-dataset-import-summary" class="section level1">
 <h1>Original Dataset Import &amp; Summary</h1>
-<pre class="r"><code>restaurantDf = read.csv('restaurantDf.csv', header = TRUE) 
+<div id="analysis-of-the-summary" class="section level2">
+<h2>Analysis of the Summary</h2>
+<p>Somehting that is apparent from glance is that this dataset has a lot of “Unknown” labels. “Unknown” is a remnant of the python processing file which was used to indicate data that was missing.</p>
+<pre class="r"><code>restaurantDf = read.csv('restaurantInfo.csv', header = TRUE) 
 print(&quot;This is the summary information of the original dataset...&quot;)</code></pre>
 <pre><code>## [1] &quot;This is the summary information of the original dataset...&quot;</code></pre>
 <pre class="r"><code>print(summary(restaurantDf))</code></pre>
@@ -150,134 +153,30 @@ print(&quot;This is the summary information of the original dataset...&quot;)</c
 ##  Charlotte : 2882   3rd Qu.:1.000   Plateau-Mont-Royal:  976  
 ##  Pittsburgh: 2642   Max.   :1.000   Southeast         :  911  
 ##  (Other)   :33978                   (Other)           :23332  
-##   review_count         stars          state                Alcohol     
-##  Min.   :   3.00   Min.   :1.00   ON     :15532   beer_and_wine: 6234  
-##  1st Qu.:   6.00   1st Qu.:3.00   AZ     :12618   full_bar     :16016  
-##  Median :  15.00   Median :3.50   NV     : 8556   none         :18801  
-##  Mean   :  50.38   Mean   :3.51   OH     : 5454   Unknown      :22100  
-##  3rd Qu.:  45.00   3rd Qu.:4.00   QC     : 5380                        
-##  Max.   :6979.00   Max.   :5.00   NC     : 4477                        
-##                                   (Other):11134                        
-##  Ambience.casual Ambience.classy Ambience.hipster Ambience.intimate
-##  False  :21864   False  :39275   False  :39243    False  :39587    
-##  True   :18241   True   :  830   True   :  840    True   :  518    
-##  Unknown:23046   Unknown:23046   Unknown:23068    Unknown:23046    
-##                                                                    
-##                                                                    
-##                                                                    
-##                                                                    
-##  Ambience.romantic Ambience.touristy Ambience.trendy Ambience.upscale
-##  False  :39603     False  :39924     False  :38344   False  :39755   
-##  True   :  502     True   :  181     True   : 1761   True   :  350   
-##  Unknown:23046     Unknown:23046     Unknown:23046   Unknown:23046   
+##   review_count         stars          state      
+##  Min.   :   3.00   Min.   :1.00   ON     :15532  
+##  1st Qu.:   6.00   1st Qu.:3.00   AZ     :12618  
+##  Median :  15.00   Median :3.50   NV     : 8556  
+##  Mean   :  50.38   Mean   :3.51   OH     : 5454  
+##  3rd Qu.:  45.00   3rd Qu.:4.00   QC     : 5380  
+##  Max.   :6979.00   Max.   :5.00   NC     : 4477  
+##                                   (Other):11134  
+##  BusinessAcceptsCreditCards RestaurantsPriceRange2 RestaurantsTakeOut
+##  False  : 3252              1.0    :23893          False  : 4815     
+##  True   :52633              2.0    :30064          True   :48694     
+##  Unknown: 7266              3.0    : 3551          Unknown: 9642     
+##                             4.0    :  631                            
+##                             Unknown: 5012                            
 ##                                                                      
 ##                                                                      
-##                                                                      
-##                                                                      
-##   BikeParking    BusinessAcceptsCreditCards BusinessParking.garage
-##  False  : 9918   False  : 3252              False  :48909         
-##  True   :33021   True   :52633              True   : 2729         
-##  Unknown:20212   Unknown: 7266              Unknown:11513         
-##                                                                   
-##                                                                   
-##                                                                   
-##                                                                   
-##  BusinessParking.lot BusinessParking.street BusinessParking.valet
-##  False  :31485       False  :40990          False  :50529        
-##  True   :20153       True   :10648          True   : 1109        
-##  Unknown:11513       Unknown:11513          Unknown:11513        
-##                                                                  
-##                                                                  
-##                                                                  
-##                                                                  
-##  BusinessParking.validated  GoodForKids    GoodForMeal.breakfast
-##  False  :50064             False  : 7743   False  :39149        
-##  True   :  274             True   :37905   True   : 3726        
-##  Unknown:12813             Unknown:17503   Unknown:20276        
-##                                                                 
-##                                                                 
-##                                                                 
-##                                                                 
-##  GoodForMeal.brunch GoodForMeal.dessert GoodForMeal.dinner
-##  False  :39323      False  :41354       False  :27571     
-##  True   : 3552      True   : 1521       True   :15304     
-##  Unknown:20276      Unknown:20276       Unknown:20276     
-##                                                           
-##                                                           
-##                                                           
-##                                                           
-##  GoodForMeal.latenight GoodForMeal.lunch     HasTV           NoiseLevel   
-##  False  :40397         False  :25045     False  :20310   average  :24956  
-##  True   : 2478         True   :17830     True   :20508   loud     : 3217  
-##  Unknown:20276         Unknown:20276     Unknown:22333   quiet    : 8746  
-##                                                          Unknown  :25100  
-##                                                          very_loud: 1132  
-##                                                                           
-##                                                                           
-##  OutdoorSeating  RestaurantsAttire RestaurantsDelivery
-##  False  :27757   casual :43278     False  :35374      
-##  True   :19271   dressy : 1397     True   :10781      
-##  Unknown:16123   formal :  125     Unknown:16996      
-##                  Unknown:18351                        
-##                                                       
-##                                                       
-##                                                       
-##  RestaurantsGoodForGroups RestaurantsPriceRange2 RestaurantsReservations
-##  False  : 6073            1.0    :23893          False  :27034          
-##  True   :40223            2.0    :30064          True   :18001          
-##  Unknown:16855            3.0    : 3551          Unknown:18116          
-##                           4.0    :  631                                 
-##                           Unknown: 5012                                 
-##                                                                         
-##                                                                         
-##  RestaurantsTableService RestaurantsTakeOut      WiFi      
-##  False  :14318           False  : 4815      free   :18249  
-##  True   :25637           True   :48694      no     :21035  
-##  Unknown:23196           Unknown: 9642      paid   :  317  
-##                                             Unknown:23550  
-##                                                            
-##                                                            
-##                                                            
-##  MondayClosingHours MondayOpeningHours TuesdayClosingHours
-##  Unknown:22452      Unknown:22452      Unknown:19235      
-##  22     :10452      11     :15354      22     :11295      
-##  21     : 8215      10     : 5818      21     : 8983      
-##  0      : 4499      7      : 3552      23     : 4841      
-##  23     : 4470      6      : 2696      0      : 4638      
-##  20     : 2653      9      : 2471      20     : 2903      
-##  (Other):10410      (Other):10808      (Other):11256      
-##  TuesdayOpeningHours WednesdayClosingHours WednesdayOpeningHours
-##  Unknown:19235       Unknown:18519         Unknown:18519        
-##  11     :16496       22     :11515         11     :16724        
-##  10     : 6063       21     : 9095         10     : 6126        
-##  7      : 3638       23     : 4957         7      : 3674        
-##  17     : 2952       0      : 4668         17     : 3103        
-##  6      : 2743       20     : 2980         6      : 2752        
-##  (Other):12024       (Other):11417         (Other):12253        
-##  ThursdayClosingHours ThursdayOpeningHours FridayClosingHours
-##  Unknown:18327        Unknown:18327        Unknown:18242     
-##  22     :11347        11     :16831        22     : 9846     
-##  21     : 9001        10     : 6153        23     : 7357     
-##  23     : 5169        7      : 3662        21     : 6265     
-##  0      : 4581        17     : 3110        0      : 5062     
-##  20     : 3014        6      : 2753        2      : 3392     
-##  (Other):11712        (Other):12315        (Other):12987     
-##  FridayOpeningHours SaturdayClosingHours SaturdayOpeningHours
-##  Unknown:18242      Unknown:19318        Unknown:19318       
-##  11     :16979      22     : 9644        11     :14469       
-##  10     : 6175      23     : 7307        10     : 6473       
-##  7      : 3704      21     : 5735        9      : 3486       
-##  17     : 3010      0      : 5069        12     : 3022       
-##  6      : 2746      2      : 3400        17     : 2966       
-##  (Other):12295      (Other):12678        (Other):13417       
-##  SundayClosingHours SundayOpeningHours
-##  Unknown:24967      Unknown:24967     
-##  22     : 8825      11     :12013     
-##  21     : 7194      10     : 5370     
-##  0      : 4287      12     : 4324     
-##  23     : 4020      9      : 2833     
-##  20     : 2741      7      : 2583     
-##  (Other):11117      (Other):11061</code></pre>
+##   Parking     
+##  False:31663  
+##  True :31488  
+##               
+##               
+##               
+##               
+## </code></pre>
 <pre class="r"><code>nObservations = nrow(restaurantDf)
 nFactors = ncol(restaurantDf)</code></pre>
 <p>These are the number of observations in the original dataset</p>
@@ -285,41 +184,20 @@ nFactors = ncol(restaurantDf)</code></pre>
 <pre><code>## [1] 63151</code></pre>
 <p>These are the number of columns in the original dataset</p>
 <pre class="r"><code>print(nFactors)</code></pre>
-<pre><code>## [1] 57</code></pre>
+<pre><code>## [1] 13</code></pre>
 <p>These are the columns in the original dataset</p>
 <pre class="r"><code>print(colnames(restaurantDf))</code></pre>
 <pre><code>##  [1] &quot;X&quot;                          &quot;index&quot;                     
 ##  [3] &quot;business_id&quot;                &quot;city&quot;                      
 ##  [5] &quot;is_open&quot;                    &quot;neighborhood&quot;              
 ##  [7] &quot;review_count&quot;               &quot;stars&quot;                     
-##  [9] &quot;state&quot;                      &quot;Alcohol&quot;                   
-## [11] &quot;Ambience.casual&quot;            &quot;Ambience.classy&quot;           
-## [13] &quot;Ambience.hipster&quot;           &quot;Ambience.intimate&quot;         
-## [15] &quot;Ambience.romantic&quot;          &quot;Ambience.touristy&quot;         
-## [17] &quot;Ambience.trendy&quot;            &quot;Ambience.upscale&quot;          
-## [19] &quot;BikeParking&quot;                &quot;BusinessAcceptsCreditCards&quot;
-## [21] &quot;BusinessParking.garage&quot;     &quot;BusinessParking.lot&quot;       
-## [23] &quot;BusinessParking.street&quot;     &quot;BusinessParking.valet&quot;     
-## [25] &quot;BusinessParking.validated&quot;  &quot;GoodForKids&quot;               
-## [27] &quot;GoodForMeal.breakfast&quot;      &quot;GoodForMeal.brunch&quot;        
-## [29] &quot;GoodForMeal.dessert&quot;        &quot;GoodForMeal.dinner&quot;        
-## [31] &quot;GoodForMeal.latenight&quot;      &quot;GoodForMeal.lunch&quot;         
-## [33] &quot;HasTV&quot;                      &quot;NoiseLevel&quot;                
-## [35] &quot;OutdoorSeating&quot;             &quot;RestaurantsAttire&quot;         
-## [37] &quot;RestaurantsDelivery&quot;        &quot;RestaurantsGoodForGroups&quot;  
-## [39] &quot;RestaurantsPriceRange2&quot;     &quot;RestaurantsReservations&quot;   
-## [41] &quot;RestaurantsTableService&quot;    &quot;RestaurantsTakeOut&quot;        
-## [43] &quot;WiFi&quot;                       &quot;MondayClosingHours&quot;        
-## [45] &quot;MondayOpeningHours&quot;         &quot;TuesdayClosingHours&quot;       
-## [47] &quot;TuesdayOpeningHours&quot;        &quot;WednesdayClosingHours&quot;     
-## [49] &quot;WednesdayOpeningHours&quot;      &quot;ThursdayClosingHours&quot;      
-## [51] &quot;ThursdayOpeningHours&quot;       &quot;FridayClosingHours&quot;        
-## [53] &quot;FridayOpeningHours&quot;         &quot;SaturdayClosingHours&quot;      
-## [55] &quot;SaturdayOpeningHours&quot;       &quot;SundayClosingHours&quot;        
-## [57] &quot;SundayOpeningHours&quot;</code></pre>
+##  [9] &quot;state&quot;                      &quot;BusinessAcceptsCreditCards&quot;
+## [11] &quot;RestaurantsPriceRange2&quot;     &quot;RestaurantsTakeOut&quot;        
+## [13] &quot;Parking&quot;</code></pre>
 <p>For reference, we have set the seed to 1.</p>
 <pre class="r"><code>set.seed(1)</code></pre>
 <hr />
+</div>
 </div>
 <div id="changing-data-types-reordering-factors" class="section level1">
 <h1>Changing Data Types &amp; Reordering Factors</h1>
@@ -331,33 +209,52 @@ restaurantDf$review_count &lt;- as.numeric(restaurantDf$review_count)</code></pr
 </div>
 <div id="setting-ordering-to-factors" class="section level2">
 <h2>Setting Ordering to Factors</h2>
-<p>The columns “Alcohol”, “NoiseLevel”, “RestaurantsAttire”, “RestaurantsPriceRange2”, and “WiFi” can be considered categorical data types. We extracted the columns above by manually looking through the labels of each columns. However, we examine below that some of the orderings of the factors do not make sense. We arbitrarly ordered the factors from “Unknown” to “negative” to a more “positive” ranking. “Unknown” indicating that we did not have information on the data. “negative” indicating something that we presumed to not be in favor of the customer. “positive” indicating something in favor for the customer. However, this ranking is somewhat subjective. Hence, we explain this part by part for each of the columns.</p>
-<pre class="r"><code>print(levels(restaurantDf$Alcohol))</code></pre>
-<pre><code>## [1] &quot;beer_and_wine&quot; &quot;full_bar&quot;      &quot;none&quot;          &quot;Unknown&quot;</code></pre>
-<pre class="r"><code>restaurantDf$Alcohol&lt;- factor(restaurantDf$Alcohol, levels = c(&quot;Unknown&quot;, &quot;none&quot;, &quot;beer_and_wine&quot;, &quot;full_bar&quot;))
-print(levels(restaurantDf$Alcohol))</code></pre>
-<pre><code>## [1] &quot;Unknown&quot;       &quot;none&quot;          &quot;beer_and_wine&quot; &quot;full_bar&quot;</code></pre>
-<pre class="r"><code>print(levels(restaurantDf$NoiseLevel))</code></pre>
-<pre><code>## [1] &quot;average&quot;   &quot;loud&quot;      &quot;quiet&quot;     &quot;Unknown&quot;   &quot;very_loud&quot;</code></pre>
-<pre class="r"><code>restaurantDf$NoiseLevel&lt;- factor(restaurantDf$NoiseLevel, levels = c(&quot;Unknown&quot;, &quot;quiet&quot;, &quot;average&quot;, &quot;very_loud&quot;))
-print(levels(restaurantDf$NoiseLevel))</code></pre>
-<pre><code>## [1] &quot;Unknown&quot;   &quot;quiet&quot;     &quot;average&quot;   &quot;very_loud&quot;</code></pre>
-<pre class="r"><code>print(levels(restaurantDf$RestaurantsAttire))</code></pre>
-<pre><code>## [1] &quot;casual&quot;  &quot;dressy&quot;  &quot;formal&quot;  &quot;Unknown&quot;</code></pre>
-<pre class="r"><code>restaurantDf$RestaurantsAttire&lt;- factor(restaurantDf$RestaurantsAttire, levels = c(&quot;Unknown&quot;, &quot;casual&quot;, &quot;dressy&quot;, &quot;formal&quot;))
-print(levels(restaurantDf$RestaurantsAttire))</code></pre>
-<pre><code>## [1] &quot;Unknown&quot; &quot;casual&quot;  &quot;dressy&quot;  &quot;formal&quot;</code></pre>
+<p>The columns “BusinessAcceptsCreditCards”, “RestaurantsPriceRange2”, and “RestaurantsTakeOut” can be considered categorical data types. We extracted the columns above by manually looking through the labels of each columns. However, we examine below that some of the orderings of the factors do not make sense. We arbitrarly ordered the factors from “Unknown” to “negative” to a more “positive” ranking. “Unknown” indicating that we did not have information on the data. “negative” indicating something that we presumed to not be in favor of the customer. “positive” indicating something in favor for the customer. However, this ranking is somewhat subjective. Hence, we explain this part by part for each of the columns.</p>
 <pre class="r"><code>print(levels(restaurantDf$RestaurantsPriceRange2 )) </code></pre>
 <pre><code>## [1] &quot;1.0&quot;     &quot;2.0&quot;     &quot;3.0&quot;     &quot;4.0&quot;     &quot;Unknown&quot;</code></pre>
 <pre class="r"><code>restaurantDf$RestaurantsPriceRange2&lt;- factor(restaurantDf$RestaurantsPriceRange2, levels = c(&quot;Unknown&quot;, &quot;1.0&quot;, &quot;2.0&quot;, &quot;3.0&quot;, &quot;4.0&quot;))
 print(levels(restaurantDf$RestaurantsPriceRange2))</code></pre>
 <pre><code>## [1] &quot;Unknown&quot; &quot;1.0&quot;     &quot;2.0&quot;     &quot;3.0&quot;     &quot;4.0&quot;</code></pre>
-<pre class="r"><code>print(levels(restaurantDf$WiFi )) </code></pre>
-<pre><code>## [1] &quot;free&quot;    &quot;no&quot;      &quot;paid&quot;    &quot;Unknown&quot;</code></pre>
-<pre class="r"><code>restaurantDf$WiFi&lt;- factor(restaurantDf$WiFi, levels = c(&quot;Unknown&quot;, &quot;no&quot;, &quot;paid&quot;, &quot;free&quot;))
-print(levels(restaurantDf$WiFi))</code></pre>
-<pre><code>## [1] &quot;Unknown&quot; &quot;no&quot;      &quot;paid&quot;    &quot;free&quot;</code></pre>
+<pre class="r"><code>print(levels(restaurantDf$BusinessAcceptsCreditCards )) </code></pre>
+<pre><code>## [1] &quot;False&quot;   &quot;True&quot;    &quot;Unknown&quot;</code></pre>
+<pre class="r"><code>restaurantDf$BusinessAcceptsCreditCards&lt;- factor(restaurantDf$BusinessAcceptsCreditCards, levels = c(&quot;Unknown&quot;, &quot;False&quot;, &quot;True&quot;))
+print(levels(restaurantDf$BusinessAcceptsCreditCards )) </code></pre>
+<pre><code>## [1] &quot;Unknown&quot; &quot;False&quot;   &quot;True&quot;</code></pre>
+<pre class="r"><code>print(levels(restaurantDf$RestaurantsTakeOut )) </code></pre>
+<pre><code>## [1] &quot;False&quot;   &quot;True&quot;    &quot;Unknown&quot;</code></pre>
+<pre class="r"><code>restaurantDf$RestaurantsTakeOut&lt;- factor(restaurantDf$RestaurantsTakeOut, levels = c(&quot;Unknown&quot;, &quot;False&quot;, &quot;True&quot;))
+print(levels(restaurantDf$RestaurantsTakeOut )) </code></pre>
+<pre><code>## [1] &quot;Unknown&quot; &quot;False&quot;   &quot;True&quot;</code></pre>
 </div>
+</div>
+<div id="removing-columns" class="section level1">
+<h1>Removing Columns</h1>
+<p>We removed unnecessary columns “X” and “index” which are remnants of the preprocessing data in python. We also removed “business_id”, “city”, “neighborhood”, and “state” because we were not interested in such fine grain information nor regional information given that our observation set was small.</p>
+<pre class="r"><code>cleanDf &lt;- subset(restaurantDf, select = -c(X, index, business_id, city, neighborhood, state))
+head(cleanDf)</code></pre>
+<pre><code>##   is_open review_count stars BusinessAcceptsCreditCards
+## 1       0            4   4.5                      False
+## 2       0           10   4.5                       True
+## 3       1           21   2.0                       True
+## 4       1            3   3.0                    Unknown
+## 5       1           15   3.0                       True
+## 6       1            6   2.5                       True
+##   RestaurantsPriceRange2 RestaurantsTakeOut Parking
+## 1                    2.0               True   False
+## 2                    1.0               True   False
+## 3                    2.0               True   False
+## 4                Unknown            Unknown   False
+## 5                    1.0               True    True
+## 6                    2.0               True   False</code></pre>
+</div>
+<div id="taking-the-subset-of-the-data" class="section level1">
+<h1>Taking the subset of the data</h1>
+<p>We took 70% of the dataset for the training model and 30% for the test model.</p>
+<pre class="r"><code>restaurant_train = cleanDf %&gt;%
+  sample_frac(.7)
+
+restaurant_test = cleanDf %&gt;%
+  setdiff(restaurant_train)</code></pre>
 </div>
 
 
