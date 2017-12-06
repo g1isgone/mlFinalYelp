@@ -74,7 +74,6 @@ print(levels(restaurantDf$BusinessAcceptsCreditCards ))
 print(levels(restaurantDf$RestaurantsTakeOut )) 
 restaurantDf$RestaurantsTakeOut<- factor(restaurantDf$RestaurantsTakeOut, levels = c("Unknown", "False", "True"))
 print(levels(restaurantDf$RestaurantsTakeOut )) 
-
 ```
 ---
 #Removing Columns 
@@ -105,8 +104,6 @@ print(summary(tree_Open))
 tree_Open
 rpart.plot(restaurantsOpen) 
 
-tree_pred = predict(tree_Open, restaurant_test, type = "class")
-table(tree_pred, test$High)
 ```
 
 ```{r}
