@@ -95,28 +95,68 @@ restaurant_test = cleanDf %>%
 
 --- 
 # Creating a Decision Tree 
-## Predicting if the Business is Open 
+## Predicting if the Business is Open using a Classification Tree
 ```{r}
 restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class")
-
-tree_Open = tree(is_open~., data = restaurant_train)
+rpart.plot(restaurantsOpen) 
+```
+```{r}
+tree_Open = tree(is_open~ ., data = restaurant_train)
 print(summary(tree_Open))
 tree_Open
-rpart.plot(restaurantsOpen) 
+plot(tree_Open)
+text(tree_Open, pretty = 0)
 
+tree_pred = predict(tree_Open, restaurant_test, type = "class")
+table(tree_pred, restaurant_test$is_open)
+print((0+1939)/(nrow(restaurant_test))) 
 ```
-
+This model just seems to predict that restaurants will always be open? Which seems a bit weird for me... 
 ```{r}
+tree_OpenWithoutTakeOut = tree(is_open~ .-RestaurantsTakeOut, data = restaurant_train)
+print(summary(tree_OpenWithoutTakeOut))
+tree_OpenWithoutTakeOut
+plot(tree_OpenWithoutTakeOut)
+text(tree_OpenWithoutTakeOut, pretty = 0)
 
-restaurantsOpen2 <- rpart(is_open ~ review_count+stars+BusinessAcceptsCreditCards+RestaurantsPriceRange2+Parking, data = restaurant_train, method = "class")
-
-tree_Open2 = tree(is_open~.-RestaurantsTakeOut, data = restaurant_train)
-print(summary(tree_Open2))
-print(tree_Open2)
-rpart.plot(restaurantsOpen2) 
- 
-plot(tree_Open2)
-tree_Open2
-text(tree_Open2)
-tree_Open2
+tree_predWithoutTakeOut = predict(tree_OpenWithoutTakeOut, restaurant_test, type = "class")
+table(tree_predWithoutTakeOut, restaurant_test$is_open)
+print((0+1939)/(nrow(restaurant_test))) 
 ```
+
+## Predicting Star Reviews of Business using a Regression Tree
+```{r}
+restaurantsStars <- rpart(stars ~ . , data = restaurant_train, method = "anova")
+rpart.plot(restaurantsStars) 
+
+
+tree_stars = tree(stars~., data = restaurant_train)
+print(summary(tree_stars))
+tree_stars
+plot(tree_stars)
+text(tree_stars,  pretty = 0)
+```
+
+
+## Predicting ReviewCounts of Business using a Regression Tree
+```{r}
+restaurantReviews <- rpart(review_count ~ . , data = restaurant_train, method = "anova")
+rpart.plot(restaurantReviews) 
+
+
+tree_rc = tree(review_count~., data = restaurant_train)
+print(summary(tree_rc))
+tree_rc
+plot(tree_rc)
+text(tree_rc,  pretty = 0)
+```
+
+#Random Forest 
+```{r}
+rf_isOpen = randomForest(is_open~., 
+                         data = restaurant_train, 
+                         importance = TRUE)
+importance(rf_isOpen)
+varImpPlot(rf_isOpen)
+```
+
