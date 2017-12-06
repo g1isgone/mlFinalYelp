@@ -151,12 +151,31 @@ plot(tree_rc)
 text(tree_rc,  pretty = 0)
 ```
 
-#Random Forest 
+#Random Forest: Restaurant is_open
 ```{r}
 rf_isOpen = randomForest(is_open~., 
-                         data = restaurant_train, 
+                         data = cleanDf, 
+                         mtry = 3,
                          importance = TRUE)
 importance(rf_isOpen)
 varImpPlot(rf_isOpen)
 ```
+#Random Forest: Restaurant stars
+```{r}
+rf_stars = randomForest(stars~., 
+                         data = cleanDf, 
+                          mtry = 2, 
+                         importance = TRUE)
+importance(rf_stars)
+varImpPlot(rf_stars)
+```
 
+#Random Forest: Restaurant reveiw_count
+```{r}
+rf_reviewCount = randomForest(reveiw_count~., 
+                         data = cleanDf, 
+                         mtry = 2,
+                         importance = TRUE)
+importance(rf_reviewCount)
+varImpPlot(rf_reviewCount)
+```
