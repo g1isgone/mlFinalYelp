@@ -4,7 +4,8 @@ author: "Ji Won Chung"
 date: "12/5/2017"
 output: html_document
 ---
-# Purpose of the File (README)
+# Purpose of Exploring the Business Dataset
+Our final project does a two part analysis: one on the user dataset and its corresponding reviews and another on the business dataset. Our final goal is to find if there is any overlap in what features businesses consider important and users consider important. We try to identify what components define a "successful" business by exploring the business dataset which this file demonstrates. 
 
 ---
 # Import Necessary Packages 
@@ -21,7 +22,8 @@ library(rpart)
 #Original Dataset Import & Summary 
 
 ## Analysis of the Summary 
-Somehting that is apparent from glance is that this dataset has a lot of "Unknown" labels. "Unknown" is a remnant of the python processing file which was used to indicate data that was missing. 
+Somehting that is apparent from the summary is that data regarding regional information have too many different labels.  We can also see that we have 63150 observations which is not necessarily a lot of data.
+
 ```{r}
 restaurantDf = read.csv('restaurantInfo.csv', header = TRUE) 
 print("This is the summary information of the original dataset...")
@@ -52,7 +54,7 @@ set.seed(1)
 ---
 #Changing Data Types & Reordering Factors 
 ## Changing Factors to Numeric Data 
-"stars" and "review_count" are factor types in R initially. However, they are numbers on an ordinal scale and have a numeric ordering. Thus, we convert the data types of those columns to numeric. 
+"stars" and "review_count" are factor types in R initially. However, they are numbers on an ordinal scale and have a numeric ordering. Thus, we convert the data types of those columns to numeric.  
 ```{r}
 restaurantDf$stars <- as.numeric(restaurantDf$stars)
 restaurantDf$review_count <- as.numeric(restaurantDf$review_count)
@@ -100,6 +102,7 @@ restaurant_test = cleanDf %>%
 restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class")
 rpart.plot(restaurantsOpen) 
 ```
+
 ```{r}
 tree_Open = tree(is_open~ ., data = restaurant_train)
 print(summary(tree_Open))
@@ -172,7 +175,7 @@ varImpPlot(rf_stars)
 
 #Random Forest: Restaurant reveiw_count
 ```{r}
-rf_reviewCount = randomForest(reveiw_count~., 
+rf_reviewCount = randomForest(review_count~., 
                          data = cleanDf, 
                          mtry = 2,
                          importance = TRUE)
