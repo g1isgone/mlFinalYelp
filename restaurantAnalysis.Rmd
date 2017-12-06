@@ -4,8 +4,15 @@ author: "Ji Won Chung"
 date: "12/5/2017"
 output: html_document
 ---
-# Purpose of Exploring the Business Dataset
-Our final project does a two part analysis: one on the user dataset and its corresponding reviews and another on the business dataset. Our final goal is to find if there is any overlap in what features businesses consider important and users consider important. We try to identify what components define a "successful" business by exploring the business dataset which this file demonstrates. 
+---
+# Purpose of Exploring Restaurants of the Business Dataset 
+Our final project does a two part analysis: one on the user dataset and its corresponding reviews and another on the business dataset. Our final goal is to find if there is any overlap in what features businesses consider important and users consider important. We focused on restaurants information from the business dataset because we believed that Yelp reviews were generally written for restaurants and thought it was an interesting subset to look at. In addition, we hypothesized the user reviews would mainly be about restaurants and food. We try to identify what components define a "successful" restaurant business by exploring the business dataset which this file demonstrates. Our goal for exploring the restaurant business data is to use two types of models: decision trees and random forests to see if we can identify what are some potential factors that define a "successful" business. We planned to do this by identifying potential patterns that appear from the decision tree and random forest models. For example, we hypothesized that some factors may be indicated as factors of high importance for both the decision tree and random forests. If so, we further reasoned that those factors could potentially define what makes a restaurant business successful. 
+---
+## Defining as Successful Restaurant
+We recognize that success can be determined by various categories. In our case we determined that the success of a business based on the yelp dataset could be objectively determined by "is_open", "stars", and "review_count". Our assumption was that successful business most likely is still open, has good star ratings, and a lot of review counts. 
+---
+### Explanation of Successful Business Criteria 
+"is_open" demonstrates whether the business is still in business or not. "is_open" has two labels: 'Opened' and 'Closed'. 'Opened' indicates that the business is still open and 'Closed' indicates otherwise. "stars" is the star ratings of the business data. "review_count" is the number of reviews written for the business. 
 
 ---
 # Import Necessary Packages 
@@ -20,9 +27,9 @@ library(rpart)
 
 --- 
 #Original Dataset Import & Summary 
-
+---
 ## Analysis of the Summary 
-Somehting that is apparent from the summary is that data regarding regional information have too many different labels.  We can also see that we have 63150 observations which is not necessarily a lot of data.
+Something that is apparent from the summary is that data regarding regional information have too many different labels.  We can also see that we have 63150 observations which is not necessarily a lot of data. Originally we were going to subset the dataset by region (for example by states) and run models on the individual regions. However, since the business dataset with only restaurants is small, we decided to run models on the entire restaurant dataset instead. 
 
 ```{r}
 restaurantDf = read.csv('restaurantInfo.csv', header = TRUE) 
@@ -31,21 +38,22 @@ print(summary(restaurantDf))
 nObservations = nrow(restaurantDf)
 nFactors = ncol(restaurantDf)
 ```
-
+---
 These are the number of observations in the original dataset
 ```{r}
 print(nObservations)
 ```
+---
 These are the number of columns in the original dataset
 ```{r}
 print(nFactors)
 ``` 
-
+---
 These are the columns in the original dataset
 ```{r}
 print(colnames(restaurantDf))
 ```
-
+---
 For reference, we have set the seed to 1. 
 ```{r}
 set.seed(1)
@@ -97,11 +105,16 @@ restaurant_test = cleanDf %>%
 
 --- 
 # Creating a Decision Tree 
-## Predicting if the Business is Open using a Classification Tree
+For each of the decision tree models we made two plots. One using rpart.plot and the other using the tree library. The initial reason was the fact that the text() function would not work. However, we found out that it does work if we run the programs in chunks. However, we left both models because it was interesting to see slightly different models in some of the cases and some gave more statistics than others. 
+---
+## Predicting if the Restaurant is Open using a Classification Tree
+We created a classification tree that would predict if the restaurant was still in business or not ("is_open" column) using rpart. 
 ```{r}
 restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class")
 rpart.plot(restaurantsOpen) 
 ```
+---
+The restaurantsOpen model shows indiciates that if there is data on RestaurantsTakeOut or when "RestaurantsTakeOut = Unknown" is "No", 85% of the time the restaurants are open. This is an interesting find because we did not imagine that the fact that there existed information on take out could be a potential predictor for whether the restaurant was open or not. If the restaurant had no information on take out and parking was either unknown or unavailable, then 12% of the time the restaurants seemed to be open. Else, they were closed. Perhaps this indicated that if parking in fact had no affect on a successful restaurant, because 12% of the restaurants would be open regardless of whether they had parking or not. Perhaps the 4% of the restaurants that were closed because they had parking occurred because they spent too much money on parking and failed to keep their finances afloat. Using the rpart model we were unable to determine what the training error rate was so we decided to do a tree model. 
 
 ```{r}
 tree_Open = tree(is_open~ ., data = restaurant_train)
@@ -114,7 +127,8 @@ tree_pred = predict(tree_Open, restaurant_test, type = "class")
 table(tree_pred, restaurant_test$is_open)
 print((0+1939)/(nrow(restaurant_test))) 
 ```
-This model just seems to predict that restaurants will always be open? Which seems a bit weird for me... 
+---
+The model created by the tree model seemed odd because it denoted that the restaurant would always be open regardless of the "RestaurantsTakeOut" info. It was a somewhat different model from the rpart model, but this model also decided that "RestaurantsTakeOut" was importing in splitting the data. The training model has a 23.9% error rate and the approach leads to ~67.5% of correct predictions for the test data set. However, we do not think this is significant given the incomprehensible model. 
 ```{r}
 tree_OpenWithoutTakeOut = tree(is_open~ .-RestaurantsTakeOut, data = restaurant_train)
 print(summary(tree_OpenWithoutTakeOut))
@@ -124,10 +138,13 @@ text(tree_OpenWithoutTakeOut, pretty = 0)
 
 tree_predWithoutTakeOut = predict(tree_OpenWithoutTakeOut, restaurant_test, type = "class")
 table(tree_predWithoutTakeOut, restaurant_test$is_open)
-print((0+1939)/(nrow(restaurant_test))) 
+print((0+1995)/(nrow(restaurant_test))) 
 ```
+---
+We wondered if we could get a better model by taking out the "RestaurantsTakeOut" as a predictor. The tree now has a review_count as the splitter, but this too is a weird model because it predicts that the restaurants are open regardless of which direciton the tree splits. The training error is ~24% the approach leads to ~69% of correct predictions for the test data set. However, we do not think this is significant given the incomprehensible model. 
 
-## Predicting Star Reviews of Business using a Regression Tree
+---
+## Predicting Star Reviews of Restaurants using a Regression Tree
 ```{r}
 restaurantsStars <- rpart(stars ~ . , data = restaurant_train, method = "anova")
 rpart.plot(restaurantsStars) 
@@ -139,9 +156,11 @@ tree_stars
 plot(tree_stars)
 text(tree_stars,  pretty = 0)
 ```
+---
+The rpart model in this case is the same as the tree model. This model only has one node which raises doubts as to whether this is a good model. However, it seems to indicate that the availability of parking determines the star ratings. It seems that if there is no parking 50% of the data have a star rating of less than 3.5. If there is no information on Parking or if Parking exists, then half the data seems to have a rating of higher than 3.6. This is still interesting because it reflects that no Parking leads to low star ratings. This makes sense becaue a lot of people probably will not go to a restaurant if it does not have parking available. 
 
-
-## Predicting ReviewCounts of Business using a Regression Tree
+---
+## Predicting ReviewCounts of Restaurants using a Regression Tree
 ```{r}
 restaurantReviews <- rpart(review_count ~ . , data = restaurant_train, method = "anova")
 rpart.plot(restaurantReviews) 
@@ -153,7 +172,10 @@ tree_rc
 plot(tree_rc)
 text(tree_rc,  pretty = 0)
 ```
+---
+The rpart model in this case is the same as the tree model as well. The model has four terminal nodes and three splitting categories: "Parking", "is_open", and "RestaurantsPriceRange2". The splitting categories intuitively make sense as to why they would determine review counts. If there was no parking, then half the restaurants had less than 51 reviews (or an average of 15). Else, if there were no information or there was parking, whether the restaurant was open or closed determined the number of reviews. If the restaurant was closed than 12% of the restaurants had less than 87 reviews (or an average of 47). Else, if the restaurant was Open, then the the Restaurants had around 101 reviews or more than 87 reviews. If the RestaurantsPriceRange2 was Unknown or on the low 1.0 range, then 14% of the restaurants had less than 101 reviews. If it was more than 1.0 price range then 23% of the time the restaurants had more than 101 reviews (or an average of 120 reviews). This seems to show that restaurants that potentially have parking, are open, and have a "high" or above 1.0 price range that they have more reviews. This intuitively makes sense because restaurants that are successful probably have parking information, are still open, and have a "pricey" range. 
 
+---
 #Random Forest: Restaurant is_open
 ```{r}
 rf_isOpen = randomForest(is_open~., 
@@ -163,7 +185,12 @@ rf_isOpen = randomForest(is_open~.,
 importance(rf_isOpen)
 varImpPlot(rf_isOpen)
 ```
+---
+We used sqrt(p) variables or approximately 3 mtry's because this was a random forest of classification trees. We tested it on the entire dataset, cleanDf. The results indicate that across all of the trees considered in the random forest, information on RestaurantsTakeOut is by far the most important variables. This reflects what we saw in our rpart model for the decision tree. 
+
+---
 #Random Forest: Restaurant stars
+We used p/3 variables or approximately 2 mtry's for the following random forests because this was a random forest of regression trees. We tested it on the entire dataset, cleanDf for both cases. 
 ```{r}
 rf_stars = randomForest(stars~., 
                          data = cleanDf, 
@@ -172,7 +199,10 @@ rf_stars = randomForest(stars~.,
 importance(rf_stars)
 varImpPlot(rf_stars)
 ```
+---
+The results indicate that across all of the trees considered in the random forest, information on BusinessAcceptsCreditCards is one of the most important variables. It actually is unclear what variable was important. There does not seem to be a variable that is strikingly important which seems to also reflect the bad model seen from our decision tree earlier. However, it does seem that Parking is never the bottom 2 importance variables. 
 
+---
 #Random Forest: Restaurant reveiw_count
 ```{r}
 rf_reviewCount = randomForest(review_count~., 
@@ -182,3 +212,5 @@ rf_reviewCount = randomForest(review_count~.,
 importance(rf_reviewCount)
 varImpPlot(rf_reviewCount)
 ```
+---
+The results indicate that across all of the trees considered in the random forest, information on Parking and RestaurntsPriceRange2 are by far the most important variables. This reflects what we saw in our decision tree earlier, so it strengthens our case that Parking and Price Range is important for determining the number of review counts of a business. The "is_open" category is also never the bottom two, so perhaps that is significant as well. 
