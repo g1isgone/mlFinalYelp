@@ -13,7 +13,7 @@ The following datasets are stored at: https://drive.google.com/open?id=165BtowOk
 - activeUserDf.pkl  5MB
 - activeReviewDf.pkl  186MB
 
-##Data Wrangling
+## Data Wrangling
 
 ### ParseUserJson.ipynb
 
@@ -36,8 +36,6 @@ Parse the 3.82GB review.json and does data cleaning. The result data frames are 
 - text (string, the review itself)
 
 ### SyncUserAndReview.ipynb
-
-*NO NEED TO TOUCH it*
 
 Sync userDfFile.csv wiht all reviewDfFile parsed from ParseUserJson and ParseReviewJson by counting the number of available reviews for each user, and collecting all available review_id. Users with *<=80%* reviews available are dropped. The result is stoed in *UserWithReviewDf.pkl*, which contains the following data fields:
 
@@ -66,6 +64,8 @@ Sample 80% of reviews in inactiveReviewDf and concat them with a random sample 0
 The rest is exported as *test.pkl*
 
 length: 388904
+
+## Modeling & Analysis
 
 ### ReviewClassification.ipynb
 
