@@ -117,10 +117,12 @@ For each of the decision tree models we made two plots. One using rpart.plot and
 ## Predicting if the Restaurant is Open using a Classification Tree
 We created a classification tree that would predict if the restaurant was still in business or not ("is_open" column) using rpart. 
 ```{r}
-restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class")
+restaurantsOpen <- rpart(is_open ~ . , data = restaurant_train, method = "class", cp = 0.001)
 rpart.plot(restaurantsOpen) 
+
 ```
----
+
+
 The restaurantsOpen model shows indiciates that if there is data on RestaurantsTakeOut or when "RestaurantsTakeOut = Unknown" is "No", 85% of the time the restaurants are open. This is an interesting find because we did not imagine that the fact that there existed information on take out could be a potential predictor for whether the restaurant was open or not. If the restaurant had no information on take out and parking was either unknown or unavailable, then 12% of the time the restaurants seemed to be open. Else, they were closed. Perhaps this indicated that if parking in fact had no affect on a successful restaurant, because 12% of the restaurants would be open regardless of whether they had parking or not. Perhaps the 4% of the restaurants that were closed because they had parking occurred because they spent too much money on parking and failed to keep their finances afloat. Using the rpart model we were unable to determine what the training error rate was so we decided to do a tree model. 
 
 ```{r}
@@ -153,26 +155,33 @@ We wondered if we could get a better model by taking out the "RestaurantsTakeOut
 ---
 ## Predicting Star Reviews of Restaurants using a Regression Tree
 ```{r}
-restaurantsStars <- rpart(stars ~ . , data = restaurant_train, method = "anova")
+restaurantsStars <- rpart(stars ~ . , data = restaurant_train, method = "anova",  cp = 0.002)
 rpart.plot(restaurantsStars) 
 
+```
 
+```{r}
 tree_stars = tree(stars~., data = restaurant_train)
 print(summary(tree_stars))
 tree_stars
 plot(tree_stars)
 text(tree_stars,  pretty = 0)
 ```
----
+
+
+
 The rpart model in this case is the same as the tree model. This model only has one node which raises doubts as to whether this is a good model. However, it seems to indicate that the availability of parking determines the star ratings. It seems that if there is no parking 50% of the data have a star rating of less than 3.5. If there is no information on Parking or if Parking exists, then half the data seems to have a rating of higher than 3.6. This is still interesting because it reflects that no Parking leads to low star ratings. This makes sense becaue a lot of people probably will not go to a restaurant if it does not have parking available. 
 
 ---
 ## Predicting ReviewCounts of Restaurants using a Regression Tree
 ```{r}
-restaurantReviews <- rpart(review_count ~ . , data = restaurant_train, method = "anova")
+restaurantReviews <- rpart(review_count ~ . , data = restaurant_train, method = "anova", cp = 0.003)
 rpart.plot(restaurantReviews) 
+```
 
 
+
+```{r}
 tree_rc = tree(review_count~., data = restaurant_train)
 print(summary(tree_rc))
 tree_rc
