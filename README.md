@@ -1,18 +1,24 @@
 # mlFinalYelp
 Machine Learning Final Project using the yelp dataset 
 
-##Data Wrangling
+## Datasets
+
+The following datasets are stored at: https://drive.google.com/open?id=165BtowOkCVpmIDeQlqj-JRLZBs2up2sS
+
+- UserWithReviewDf.pkl 65MB
+- train.pkl 247MB
+- test.pkl  63MB
+- inactiveUserDf.pkl  20MB
+- inactiveReviewDf.pkl  120MB
+- activeUserDf.pkl  5MB
+- activeReviewDf.pkl  186MB
+
+## Data Wrangling
 
 ### ParseUserJson.ipynb
 
-*NO NEED TO TOUCH it*
+Parsed the 1.57GB user.json and did data cleaning. The result data frame is stored locally as *userDfFile.csv* which contains the follwing fields:
 
-The file is just for parsing a 1.57GB user.json file and has stored the data frame as 'userDfFile.csv'.
-
-To load the clean data frame: 
-`userDf = panda.read_csv('userDfFile.csv',index_col=0)`
-
-It contains the following data fields:
 - average_stars    float64
 - review_count       int64
 - user_id           object
@@ -20,9 +26,8 @@ It contains the following data fields:
 
 ### ParseReviewJson.ipynb
 
-*NO NEED TO TOUCH it either*
+Parse the 3.82GB review.json and does data cleaning. The result data frames are stored locally as *reviewDfFile1.csv, reviewDfFile2,csv, reviewDfFile3.csv, reviewDfFile4.csv*, which all contains the following data fields:
 
-The parsed csv files are stored locally and contains the following data fields:
 - review_id (string, 22 character unique review id)
 - user_id (string, 22 character unique user id, maps to the user in user.json)
 - business_id (string, 22 character business id, maps to business in business.json)
@@ -32,11 +37,7 @@ The parsed csv files are stored locally and contains the following data fields:
 
 ### SyncUserAndReview.ipynb
 
-*NO NEED TO TOUCH it*
-
-Sync userDfFile.csv wiht all reviewDfFile parsed from ParseUserJson and ParseReviewJson by counting the number of available reviews for each user, and collecting all available review_id. Users with *<=80%* reviews available are dropped. The result is stoed in UserWithReviewDf.pkl
-
-UserWithReviewDf.pkl contains the following data fileds:
+Sync userDfFile.csv wiht all reviewDfFile parsed from ParseUserJson and ParseReviewJson by counting the number of available reviews for each user, and collecting all available review_id. Users with *<=80%* reviews available are dropped. The result is stoed in *UserWithReviewDf.pkl*, which contains the following data fields:
 
 - average_stars (float64, same as average_stars in the original user dataset)
 - review_count (int64, same as review_count in the original user dataset)
@@ -46,36 +47,36 @@ UserWithReviewDf.pkl contains the following data fileds:
 - AvailReviewCount (int64, the length of the set stored in Reviews)
 - Reviews (object, a set containing all available review_id that corresponding to the current user in the review datasets)
 
-length: 388904
+Then load UserWithReviewDf.pkl and drop users with *review_count<AvailReviewCount*
 
-### FPIII_user.ipynb
+Subset users with review_count==1 as inactive users and export the data frame as *inactiveUserDf.pkl*
 
-Contains scatterplot of review_count and average_stars
+Subset users with review_count>=90 as active users and export the data frame as *activeUserDf.pkl*
 
-Load UserWithReviewDf.pkl as userDf and drop users with *review_count<AvailReviewCount*
-
-Subset users with review_count==1 as inactive users and export the data frame as inactiveUserDf.pkl
-
-Subset users with review_count>=90 as active users and export the data frame as activeUserDf.pkl
-
-Load all reviewDfFile and subset all reviews with review_id in inactiveUserDf.pkl and export the data frame as inactiveReviewDf.pkl
+Load *reviewDfFile1.csv, reviewDfFile2,csv, reviewDfFile3.csv, reviewDfFile4.csv* and subset all reviews with review_id in *inactiveUserDf.pkl* and export the data frame as *inactiveReviewDf.pkl*
 The length is 214054.
 
-Load all reviewDfFile and subset all reviews with review_id in activeUserDf.pkl and export the data frame as activeReviewDf.pkl
+Subset all reviews with review_id in activeUserDf.pkl and export the data frame as *activeReviewDf.pkl*
 The length is 210572.
 
-Sample 80% of reviews in inactiveReviewDf and concat them with a random sample 0f 80% reviews in activeReviewDf to form the train set. Export the train set as train.pkl
+Sample 80% of reviews in inactiveReviewDf and concat them with a random sample 0f 80% reviews in activeReviewDf to form the train set. Export the train set as *train.pkl*
 
-The rest is exported as test.pkl
+The rest is exported as *test.pkl*
+
+length: 388904
+
+## Modeling & Analysis
 
 ### ReviewClassification.ipynb
 
-Apply tf-idf and run naive Bayes model and support vector machine model to predict whether a user is active or not with the text of review.
+Apply tf-idf and run naive Bayes classifier and Support Vector Machine model to predict whether a user is active or not with review contents. SVM achieves an accuracy of 80%.
 
-## Fetech dataset
+Visualize tf-idf of a subset of active users and a subset of inactive users.
 
-To fetch large datasets (all .pkl) stored remotely with Git LFS, view instructions here:
-https://git-lfs.github.com/
+### UserExploration.ipynb
+
+Contains scatterplot of review_count and average_stars, and some random experimentations with user and review data.
+
 
 ## Misc
 
