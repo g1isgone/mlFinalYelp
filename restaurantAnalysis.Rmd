@@ -187,6 +187,10 @@ print(summary(tree_rc))
 tree_rc
 plot(tree_rc)
 text(tree_rc,  pretty = 0)
+
+tree_rc_estimate = predict(tree_rc, newdata = restaurant_train)
+print(mean((tree_rc_estimate - restaurant_test$review_count)^2))
+print(median(cleanDf$review_count))
 ```
 ---
 The rpart model in this case is the same as the tree model as well. The model has four terminal nodes and three splitting categories: "Parking", "is_open", and "RestaurantsPriceRange2". The splitting categories intuitively make sense as to why they would determine review counts. If there was no parking, then half the restaurants had less than 51 reviews (or an average of 15). Else, if there were no information or there was parking, whether the restaurant was open or closed determined the number of reviews. If the restaurant was closed than 12% of the restaurants had less than 87 reviews (or an average of 47). Else, if the restaurant was Open, then the the Restaurants had around 101 reviews or more than 87 reviews. If the RestaurantsPriceRange2 was Unknown or on the low 1.0 range, then 14% of the restaurants had less than 101 reviews. If it was more than 1.0 price range then 23% of the time the restaurants had more than 101 reviews (or an average of 120 reviews). This seems to show that restaurants that potentially have parking, are open, and have a "high" or above 1.0 price range that they have more reviews. This intuitively makes sense because restaurants that are successful probably have parking information, are still open, and have a "pricey" range. 
@@ -200,6 +204,10 @@ rf_isOpen = randomForest(is_open~.,
                          importance = TRUE)
 print(importance(rf_isOpen))
 print(varImpPlot(rf_isOpen))
+
+rf_open_estimate = predict(rf_isOpen, newdata = restaurant_train)
+print(mean((rf_open_estimate - restaurant_test$review_count)^2))
+print(median(cleanDf$review_count))
 ```
 ---
 We used sqrt(p) variables or approximately 3 mtry's because this was a random forest of classification trees. We tested it on the entire dataset, cleanDf. The results indicate that across all of the trees considered in the random forest, information on RestaurantsTakeOut is by far the most important variables. This reflects what we saw in our rpart model for the decision tree. 
@@ -219,7 +227,7 @@ print(varImpPlot(rf_stars))
 The results indicate that across all of the trees considered in the random forest, information on BusinessAcceptsCreditCards is one of the most important variables. It actually is unclear what variable was important. There does not seem to be a variable that is strikingly important which seems to also reflect the bad model seen from our decision tree earlier. However, it does seem that Parking is never the bottom 2 importance variables. 
 
 ---
-# Random Forest: Restaurant reveiw_count
+# Random Forest: Restaurant review_count
 ```{r}
 rf_reviewCount = randomForest(review_count~., 
                          data = cleanDf, 
@@ -227,6 +235,10 @@ rf_reviewCount = randomForest(review_count~.,
                          importance = TRUE)
 print(importance(rf_reviewCount))
 print(varImpPlot(rf_reviewCount))
+
+rf_rc_estimate = predict(rf_reviewCount, newdata = restaurant_train)
+print(mean((rf_rc_estimate - restaurant_test$review_count)^2))
+print(median(cleanDf$review_count))
 ```
 ---
 The results indicate that across all of the trees considered in the random forest, information on Parking and RestaurntsPriceRange2 are by far the most important variables. This reflects what we saw in our decision tree earlier, so it strengthens our case that Parking and Price Range is important for determining the number of review counts of a business. The "is_open" category is also never the bottom two, so perhaps that is significant as well. 
