@@ -1,5 +1,6 @@
 # mlFinalYelp
 Machine Learning Final Project using the yelp dataset 
+Result summary: https://github.com/g1isgone/mlFinalYelp/blob/master/SDS293-%20Final%20Project%20Poster.pdf
 
 ## Datasets
 
